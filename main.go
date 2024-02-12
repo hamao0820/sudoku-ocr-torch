@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"image"
-	"image/color"
 	"math/rand"
 	"os"
 	"path/filepath"
@@ -96,7 +94,7 @@ func collectSquareFromCamera(id SudokuID, n int) {
 
 		origin := gocv.NewMat()
 		img.CopyTo(&origin)
-		if drawSquare(&img) {
+		if detect.DrawSquare(&img) {
 			frame++
 			if frame >= 2 {
 				square, err := detect.GetSquare(origin)
@@ -124,36 +122,6 @@ func collectSquareFromCamera(id SudokuID, n int) {
 		window.IMShow(img)
 		window.WaitKey(1)
 	}
-}
-
-func drawSquare(img *gocv.Mat) bool {
-	detect.FitSize(img, 500, 500)
-
-	gray := detect.ToGray(*img)
-	defer gray.Close()
-
-	edge := detect.FindEdge(gray)
-	defer edge.Close()
-
-	contours, _ := detect.FindContours(edge)
-	defer contours.Close()
-
-	min_area := float64(img.Rows()*img.Cols()) * 0.2
-	largeContours := detect.FilterContours(contours, min_area)
-
-	convexes := detect.GetConvexes(largeContours)
-
-	polies := detect.GetPolygons(largeContours, convexes)
-	defer polies.Close()
-
-	// 正方形に近いものを選ぶ
-	selectedIndex, _ := detect.SelectNearestSquareIndex(polies)
-	if selectedIndex == -1 {
-		return false
-	}
-
-	gocv.DrawContours(img, polies, selectedIndex, color.RGBA{255, 0, 0, 255}, 3)
-	return true
 }
 
 func collectCell() {
@@ -188,7 +156,7 @@ func collectCell() {
 			}
 			defer img.Close()
 
-			cells := splitCells(img)
+			cells := detect.SplitCell(img)
 			for y := 0; y < 9; y++ {
 				for x := 0; x < 9; x++ {
 					cell := cells[y][x]
@@ -210,21 +178,6 @@ func collectCell() {
 	for k, v := range counts {
 		fmt.Printf("%d: %d\n", k, v)
 	}
-}
-
-func splitCells(square gocv.Mat) [][]gocv.Mat {
-	cells := make([][]gocv.Mat, 9)
-	dx := float64(square.Cols()) / 9
-	dy := float64(square.Rows()) / 9
-
-	padding := 1.0
-	for y := 0; y < 9; y++ {
-		cells[y] = make([]gocv.Mat, 9)
-		for x := 0; x < 9; x++ {
-			cells[y][x] = square.Region(image.Rect(int(float64(x)*dx+padding), int(float64(y)*dy+padding), int(float64(x+1)*dx-padding), int(float64(y+1)*dy-padding)))
-		}
-	}
-	return cells
 }
 
 func loadJSON() Data {
