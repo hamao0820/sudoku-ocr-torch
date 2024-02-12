@@ -1,0 +1,6 @@
+github.com/hamao0820/sudoku v0.0.0-20240210090755-12632814d45e h1:rxhsaYt4xat8syPZ6Re5C1XVy/64Tu1rrsTqq449VTo=
+github.com/hamao0820/sudoku v0.0.0-20240210090755-12632814d45e/go.mod h1:xSAVTu7wCAyJYWnLxs7HgexpL9amlkB1e5WvbGn4mn4=
+github.com/hybridgroup/mjpeg v0.0.0-20140228234708-4680f319790e/go.mod h1:eagM805MRKrioHYuU7iKLUyFPVKqVV6um5DAvCkUtXs=
+github.com/pascaldekloe/goe v0.1.0/go.mod h1:lzWF7FIEvWOWxwDKqyGYQf6ZUaNfKdP144TG7ZOy1lc=
+gocv.io/x/gocv v0.35.0 h1:Qaxb5KdVyy8Spl4S4K0SMZ6CVmKtbfoSGQAxRD3FZlw=
+gocv.io/x/gocv v0.35.0/go.mod h1:oc6FvfYqfBp99p+yOEzs9tbYF9gOrAQSeL/dyIPefJU=
